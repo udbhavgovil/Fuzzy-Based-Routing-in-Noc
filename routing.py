@@ -4,12 +4,14 @@ import skfuzzy as fuzz
 import random 
 import time
 """
-MESH TOPOLOGY
-1 2 3 4
-. . . . 4
-. . . . 3
-. . . . 2
-. . . . 1
+MESH TOPOLOGY (4x4)
+12--13--14--15
+|   |   |   |
+8---9---10--11
+|   |   |   |
+4---5---6---7
+|   |   |   |
+0---1---2---3
 """
 def XY_routing (id_s , id_d):
         if id_s == id_d:
@@ -134,6 +136,7 @@ def initialize ():
         input_buffer_occup = np.arange(0,9,1)
         total_buffer_occup = np.arange(0,41,1)
         router_cost = np.arange(0,41,1)
+        
         inbff_ = [[] for j in range(5)]
         tobff_ = [[] for j in range(5)]
         r_cost_ = [[] for j in range(5)]
