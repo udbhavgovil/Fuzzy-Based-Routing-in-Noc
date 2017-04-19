@@ -3,6 +3,7 @@ import numpy as np
 import skfuzzy as fuzz
 import random 
 import time
+import matplotlib.pyplot as plt
 """
 MESH TOPOLOGY (4x4)
 12--13--14--15
@@ -147,13 +148,30 @@ def initialize ():
         inbff_[2]  = fuzz.trimf(input_buffer_occup , [2, 4, 6] )
         inbff_[3] = fuzz.trimf(input_buffer_occup , [4, 6, 8] )
         inbff_[4]  = fuzz.trimf(input_buffer_occup , [6, 8, 8] )
-
+        fig, ax = plt.subplots()
+        mf = ['Zero', 'Very Small' , 'Small','Medium' ,'Large']
+        for i in range(5):
+        	ax.plot(input_buffer_occup,inbff_[i], label=mf[i])
+        	
+        ax.legend(loc='upper right', shadow=True)
+        plt.title("Membership Function For Input_Buffer_occupied")	
+        
+        plt.show()
+        
 	#global tobff_ #= [[],[],[],[],[]]
         tobff_[0] = fuzz.trimf(total_buffer_occup , [0, 0, 10] )
         tobff_[1] = fuzz.trimf(total_buffer_occup , [0, 10, 20] )
         tobff_[2]  = fuzz.trimf(total_buffer_occup , [10, 20, 30] )
         tobff_[3]  = fuzz.trimf(total_buffer_occup , [20, 30, 40] )
         tobff_[4]  = fuzz.trimf(total_buffer_occup , [30, 40, 40] )
+        fig, ax = plt.subplots()
+        for i in range(5):
+        	ax.plot(total_buffer_occup,tobff_[i], label=mf[i])
+        	
+        ax.legend(loc='upper right', shadow=True)
+        plt.title("Membership Function For Total_Buffer_occupied")	
+        
+        plt.show()
 
 	#global r_cost_ #= [[],[],[],[],[]]
         r_cost_[0]  = fuzz.trimf(router_cost , [0, 0, 10] )
@@ -173,23 +191,13 @@ def compute_cost (_input , _total ):
         for i in range(5):
                 _input_.append(i)
                 _total_ .append(i)
+
+                
         rule = [[0,0,1,2,3],[0,1,1,2,3] ,[1,1,2,3,3],[2,2,3,4,4] , [3,3,4,4,4]]
+        
 	for i in range(5):
 		 _input_[i] = fuzz.interp_membership(input_buffer_occup , inbff_[i],  _input)
 		 _total_[i] = fuzz.interp_membership(total_buffer_occup , tobff_[i],  _total)
-	"""		
-        _input_[0] = fuzz.interp_membership(input_buffer_occup , inbff_[0],  _input)
-        _input_[1] = fuzz.interp_membership(input_buffer_occup , inbff_[],  _input)
-        _input_[2] = fuzz.interp_membership(input_buffer_occup , inbff_s,  _input)
-        _input_[3] = fuzz.interp_membership(input_buffer_occup , inbff_m,  _input)
-        _input_[4] = fuzz.interp_membership(input_buffer_occup , inbff_l,  _input)
-        
-        
-        _total_[1]= fuzz.interp_membership(total_buffer_occup , tobff_vs,  _total)
-        _total_[2] = fuzz.interp_membership(total_buffer_occup , tobff_s,  _total)
-        _total_[3] = fuzz.interp_membership(total_buffer_occup , tobff_m,  _total)
-        _total_[4] = fuzz.interp_membership(total_buffer_occup , tobff_l,  _total)
-	"""
 	n=0
 	m=0	
 	cost=0
@@ -211,41 +219,45 @@ def compute_cost (_input , _total ):
 
 
 initialize ()
-
-t = input ()
+test = []
+tc = input ()
+#for i in range(tc):
+#	test.append(input())
 Pass = 0 
+test.append(tc)
+
 for i in range (2,8):
-        Pass =0
-        t1 = time.clock()
-  	for j in range(t):
-  	
-		y = pow(2,i)
-		x=y
-		random.seed()
-		source = random.randint(0,x*y-1)
-		dest = random.randint (0,x*y-1)
-		while source == dest:
-		        dest = random.randint (0,x*y-1)
-		router = [{'id':k,'input_north':random.randint(1,8),'input_west':random.randint(1,8),'input_south':random.randint(1,8),'input_east':random.randint(1,8),'noc':y , 'nor':x , 'total':0} for k in range(x*y+1)]
-		for k in range(x*y):
-		        router[k]['total'] = router[k]['input_north'] + router[k]['input_south'] + router[k]['input_west'] + router[k]['input_east']
-		#for k in range(x*y):
-		#       #print k , router[k]['input_east'] , router[k]['input_north'] , router[k]['input_south'] , router[k]['input_west'] , router[k]['total']
-		##print "FXY"
-		#print x ,source , dest
-		fxy = FXY_routing(source,dest)
-		##print 
-		
-		xy =  XY_routing(source,dest)
-		##print fxy , xy , " next " 
-		if ( float (fxy/xy) <=1 ):
-		        Pass = Pass + 1;
-		#else:
-		#        print fxy , xy 
-	t2 = time.clock() - t1
+	result = []
+	for t in test:
 	
-	print "Test Cycle = ", t
-	print "Processing Time " , t2 ,"Sec"
-	print "Topology 2-D Mesh (",x,"*",y,")"
-	print "Accuracy = ", float (float(Pass*100) /t) , "%"
-	print ""
+		Pass =0
+		t1 = time.clock()
+	  	for j in range(t):
+	  	
+			y = pow(2,i)
+			x=y
+			random.seed()
+			source = random.randint(0,x*y-1)
+			dest = random.randint (0,x*y-1)
+			while source == dest:
+				dest = random.randint (0,x*y-1)
+			router = [{'id':k,'input_north':random.randint(1,8),'input_west':random.randint(1,8),'input_south':random.randint(1,8),'input_east':random.randint(1,8),'noc':y , 'nor':x , 'total':0} for k in range(x*y+1)]
+			for k in range(x*y):
+				router[k]['total'] = router[k]['input_north'] + router[k]['input_south'] + router[k]['input_west'] + router[k]['input_east']
+			fxy = FXY_routing(source,dest)
+			##print 
+		
+			xy =  XY_routing(source,dest)
+			##print fxy , xy , " next " 
+			if ( float (fxy/xy) <=1 ):
+				Pass = Pass + 1;
+			#else:
+			#        print fxy , xy 
+		t2 = time.clock() - t1
+		result.append((float(Pass*100) /t))
+		print "Test Cycle = ", t
+		print "Processing Time " , t2 ,"Sec"
+		print "Topology 2-D Mesh (",x,"*",y,")"
+		print "Accuracy = ",  (float(Pass*100) /t) , "%"
+		print ""
+	
