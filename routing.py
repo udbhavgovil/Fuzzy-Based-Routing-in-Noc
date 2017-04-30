@@ -358,18 +358,13 @@ def router_initialize(x,y):
         for k in range(x*y):
                 router[k]['total'] = router[k]['input_north'] + router[k]['input_south'] + router[k]['input_west'] + router[k]['input_east']
                 
-                
+
 if __name__ == "__main__":
 	initialize ()
-	test = []
-	tc = input ()
-	#for i in range(tc):
-	#	test.append(input())
-	Pass = 0 
-	test.append(tc)
-
-	for i in xrange (2,8):
-		result = []
+	t = input ()
+	for i in xrange (2,6):
+		
+		t1 = time.clock()
 		y = pow(2,i)
 		x=y
 		router = [{'id':k,'input_north':random.randint(1,8),'input_west':random.randint(1,8),'input_south':random.randint(1,8),'input_east':random.randint(1,8),'noc':y , 'nor':x , 'total':0} for k in range(x*y+1)]
@@ -399,58 +394,58 @@ if __name__ == "__main__":
                 D = []
                 X = []
                 
-		for t in test:
+		
                         
-			Pass_xy =0
-			Pass_dsdv=0
-			Pass_fxy=0
-			t1 = time.clock()
-		  	for j in xrange(t):
-				random.seed()
-				M = sys.maxsize
-				source = random.randint(0,x*y-1)
-				dest = random.randint (0,x*y-1)
-				count = 0
-				while source == dest:
-					dest = random.randint (0,x*y-1)
-				#print "source = " , source , "dest" , dest 
-				fxy = FXY_routing(source,dest,1)
-				##print 
-                                dsdv_xy = dsdv_compute(source,dest,routing_table)     
-				xy =  XY_routing(source,dest)
-				M = min(M,min(fxy,min(xy,dsdv_xy)))
-				F.append(fxy)
-				D.append(dsdv_xy)
-				X.append(xy)
-				#print fxy , xy , " next " , dsdv_xy , " ", M
+                Pass_xy =0
+                Pass_dsdv=0
+                Pass_fxy=0
+                
+                for j in xrange(t):
+                        random.seed()
+                        M = sys.maxsize
+                        source = random.randint(0,x*y-1)
+                        dest = random.randint (0,x*y-1)
+                        count = 0
+                        while source == dest:
+                                dest = random.randint (0,x*y-1)
+                        #print "source = " , source , "dest" , dest 
+                        fxy = FXY_routing(source,dest,1)
+                        ##print 
+                        dsdv_xy = dsdv_compute(source,dest,routing_table)     
+                        xy =  XY_routing(source,dest)
+                        M = min(M,min(fxy,min(xy,dsdv_xy)))
+                        F.append(fxy)
+                        D.append(dsdv_xy)
+                        X.append(xy)
+                        #print fxy , xy , " next " , dsdv_xy , " ", M
 
-                                if fxy == M:
-                                        Pass_fxy = Pass_fxy + 1
-                                if dsdv_xy == M:
-                                        Pass_dsdv = Pass_dsdv + 1
-                                if xy == M:
-                                        Pass_xy = Pass_xy + 1
+                        if fxy == M:
+                                Pass_fxy = Pass_fxy + 1
+                        if dsdv_xy == M:
+                                Pass_dsdv = Pass_dsdv + 1
+                        if xy == M:
+                                Pass_xy = Pass_xy + 1
 
-                                
-                                        
-			t2 = time.clock() - t1
-			#print Pass_xy , Pass_fxy , Pass_dsdv
-			result.append((float(Pass*100) /t))
-			print "Test Cycle = ", t
-			print "Processing Time " , t2 ,"Sec"
-			print "Topology 2-D Mesh (",x,"*",y,")"
-			print "Non - Fuzzy Accuracy = ",  (float(Pass_xy*100) /t) , "%"
-                        print "Fuzzy Accuracy = ",  (float(Pass_fxy*100) /t) , "%"
-                        print "Fuzzy-DSDV Accuracy = ",  (float(Pass_dsdv*100) /t) , "%"
-			print ""
-                        x_axis = np.arange(1,test[0]+1,1)
                         
-                        fig,ax = plt.subplots()
-                        
-                        ax.plot(x_axis,F,label='Fuzzy-XY')
-                        ax.plot(x_axis,D,label='Fuzzy-DSDV')
-                        ax.plot(x_axis,X,label='Non-Fuzzy')
-                        
-                        ax.legend(loc='upper right', shadow=True)
-                        plt.show()
+                
+                t2 = time.clock() - t1
+                #print Pass_xy , Pass_fxy , Pass_dsdv
+                
+                print "Test Cycle = ", t
+                print "Processing Time " , t2 ,"Sec"
+                print "Topology 2-D Mesh (",x,"*",y,")"
+                print "Non - Fuzzy Accuracy = ",  (float(Pass_xy*100) /t) , "%"
+                print "Fuzzy Accuracy = ",  (float(Pass_fxy*100) /t) , "%"
+                print "Fuzzy-DSDV Accuracy = ",  (float(Pass_dsdv*100) /t) , "%"
+                print ""
+                x_axis = np.arange(1,t+1,1)
+                
+                fig,ax = plt.subplots()
+                
+                ax.plot(x_axis,F,label='Fuzzy-XY')
+                ax.plot(x_axis,D,label='Fuzzy-DSDV')
+                ax.plot(x_axis,X,label='Non-Fuzzy')
+                
+                ax.legend(loc='upper right', shadow=True)
+                plt.show()
                         
