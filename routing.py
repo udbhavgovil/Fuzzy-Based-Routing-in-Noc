@@ -204,32 +204,32 @@ def initialize ():
 def compute_cost (_input , _total ):      
         _input_ = []
         _total_ = []
-        for i in range(5):
+        for i in xrange(5):
                 _input_.append(i)
                 _total_ .append(i)
 
                 
         rule = [[0,0,1,2,3],[0,1,1,2,3] ,[1,1,2,3,3],[2,2,3,4,4] , [3,3,4,4,4]]
-        
-	for i in range(5):
+        for i in xrange(5):
+                
                 _input_[i] = fuzz.interp_membership(input_buffer_occup , inbff_[i],  _input)
                 _total_[i] = fuzz.interp_membership(total_buffer_occup , tobff_[i],  _total)
-	n=0
-	m=0	
-	cost=0
-	mvalue=0
-	for i in _input_:
-		m=0
+        n=0
+        m=0	
+        cost=0
+        mvalue=0
+        for i in _input_:
+                m=0
                 for j in _total_:
-			if i>=0 and j>=0:
-				cost = cost + min(i,j)*value[rule[n][m]]
-	                        mvalue = mvalue + min(i,j)
-				m=m+1
-		n=n+1
+                        if i>=0 and j>=0:
+                                cost = cost + min(i,j)*value[rule[n][m]]
+                                mvalue = mvalue + min(i,j)
+                                m=m+1
+                n=n+1
 
         ##print cost/mvalue
-	##print cost
-	##print mvalue 
+        ##print cost
+        ##print mvalue 
         return (cost/mvalue)
 
 def dsdv(i,x,i_cost):
@@ -354,7 +354,7 @@ def dsdv_compute(id_s,id_d,routing_table):
 def router_initialize(x,y):
         initialize()
         global router
-	router = [{'id':k,'input_north':random.randint(1,8),'input_west':random.randint(1,8),'input_south':random.randint(1,8),'input_east':random.randint(1,8),'noc':y , 'nor':x , 'total':0} for k in range(x*y+1)]
+        router = [{'id':k,'input_north':random.randint(1,8),'input_west':random.randint(1,8),'input_south':random.randint(1,8),'input_east':random.randint(1,8),'noc':y , 'nor':x , 'total':0} for k in range(x*y+1)]
         for k in range(x*y):
                 router[k]['total'] = router[k]['input_north'] + router[k]['input_south'] + router[k]['input_west'] + router[k]['input_east']
                 
@@ -362,16 +362,16 @@ def router_initialize(x,y):
 if __name__ == "__main__":
 	initialize ()
 	t = input ()
-	for i in xrange (2,6):
+	for i in xrange (2,5):
 		
-		t1 = time.clock()
-		y = pow(2,i)
-		x=y
-		router = [{'id':k,'input_north':random.randint(1,8),'input_west':random.randint(1,8),'input_south':random.randint(1,8),'input_east':random.randint(1,8),'noc':y , 'nor':x , 'total':0} for k in range(x*y+1)]
-		for k in xrange(x*y):
+                t1 = time.clock()
+                y = pow(2,i)
+                x=y
+                router = [{'id':k,'input_north':random.randint(1,8),'input_west':random.randint(1,8),'input_south':random.randint(1,8),'input_east':random.randint(1,8),'noc':y , 'nor':x , 'total':0} for k in range(x*y+1)]
+                for k in xrange(x*y):
                         router[k]['total'] = router[k]['input_north'] + router[k]['input_south'] + router[k]['input_west'] + router[k]['input_east']
                 routing_table = []
-		for it in xrange(x*y):
+                for it in xrange(x*y):
                         routing_table.append([])
                         routing_table[it] = dsdv(it,x,0)
                         #k=input()
@@ -431,7 +431,7 @@ if __name__ == "__main__":
                 t2 = time.clock() - t1
                 #print Pass_xy , Pass_fxy , Pass_dsdv
                 
-                print "Test Cycle = ", t
+                print "Test Cycle = " , t
                 print "Processing Time " , t2 ,"Sec"
                 print "Topology 2-D Mesh (",x,"*",y,")"
                 print "Non - Fuzzy Accuracy = ",  (float(Pass_xy*100) /t) , "%"
@@ -442,9 +442,9 @@ if __name__ == "__main__":
                 
                 fig,ax = plt.subplots()
                 
-                ax.plot(x_axis,F,label='Fuzzy-XY')
-                ax.plot(x_axis,D,label='Fuzzy-DSDV')
-                ax.plot(x_axis,X,label='Non-Fuzzy')
+                ax.plot(x_axis,F,'r--',label='Fuzzy-XY')
+                ax.plot(x_axis,D,'b--',label='Fuzzy-DSDV')
+                ax.plot(x_axis,X,'g--',label='Non-Fuzzy')
                 
                 ax.legend(loc='upper right', shadow=True)
                 plt.show()
