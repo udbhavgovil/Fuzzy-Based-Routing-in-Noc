@@ -21,7 +21,7 @@ def XY_routing (id_s , id_d):
                 return 0
         
         else:
-                #print "->",
+                #print  id_s , "->", 
                 num_of_row = router[id_s]['nor']
                 num_of_col = router[id_d]['noc']
                 x_s = id_s % num_of_col
@@ -56,7 +56,7 @@ def FXY_routing (id_s , id_d ,f):
                 return 0
         
         else:
-                #print "->",
+                #print  id_s , "->",
                 num_of_row = router[id_s]['nor']
                 num_of_col = router[id_d]['noc']
                 x_s = id_s % num_of_col
@@ -70,39 +70,39 @@ def FXY_routing (id_s , id_d ,f):
                                 #print "South",
                                 if f:
                                         return FXY_routing(id_s-num_of_col ,id_d,f) + 1 + float(router[id_s]['input_south']+router[id_s-num_of_col]['input_north'])/16 + float(router[id_s-num_of_col]['total'])/40
-                                return FXY_routing(id_s-num_of_col ,id_d,f) + 1 + compute_cost(router[id_s]['input_south'],router[id_s-num_of_col]['input_north'])
+                                return FXY_routing(id_s-num_of_col ,id_d,f) + 1 + compute_cost(router[id_s]['input_south'],router[id_s-num_of_col]['input_north'])/40
                         else:
                                 #print "North",
                                 if f:
                                         return FXY_routing (id_s + num_of_col,id_d,f) + 1 + float(router[id_s]['input_north']+router[id_s+num_of_col]['input_south'])/16 + float(router[id_s+num_of_col]['total'])/40
-                                return FXY_routing(id_s+num_of_col ,id_d,f) + 1 + compute_cost(router[id_s]['input_north'],router[id_s+num_of_col]['input_south'])
+                                return FXY_routing(id_s+num_of_col ,id_d,f) + 1 + compute_cost(router[id_s]['input_north'],router[id_s+num_of_col]['input_south'])/40
                                 
                 elif y_s == y_d:
                         if x_s > x_d:
                                 #print "West",
                                 if f:
                                         return FXY_routing(id_s-1,id_d,f) + 1 + float(router[id_s]['input_west']+router[id_s-1]['input_east'])/16 + float(router[id_s-1]['total'])/40
-                                return FXY_routing(id_s-1 ,id_d,f) + 1 +  compute_cost(router[id_s]['input_west'],router[id_s-1]['input_east'])   
+                                return FXY_routing(id_s-1 ,id_d,f) + 1 +  compute_cost(router[id_s]['input_west'],router[id_s-1]['input_east'])/40   
                         else:
                                 #print "East",
                                 if f:
                                         return FXY_routing(id_s+1,id_d,f) + 1 + float(router[id_s]['input_east']+router[id_s+1]['input_west'])/16 + float(router[id_s+1]['total'])/40
-                                return FXY_routing(id_s+1,id_d,f) + 1 + compute_cost(router[id_s]['input_east'],router[id_s+1]['input_west'])   
+                                return FXY_routing(id_s+1,id_d,f) + 1 + compute_cost(router[id_s]['input_east'],router[id_s+1]['input_west'])/40   
                 else:
                         if x_s < x_d and y_s < y_d:                                  
                                 cost_x = compute_cost (router[id_s+1]['input_west'],router[id_s+1]['total']) 
-                                cost_y = compute_cost (router[id_s+num_of_col]['input_south'],router[id_s+num_of_col]['total'])
+                                cost_y = compute_cost (router[id_s+num_of_col]['input_south'],router[id_s+num_of_col]['total'])/40
                                 if cost_x <= cost_y:
                                         #print "East", 
                                         if f:
                                                 return FXY_routing(id_s+1,id_d,f) + 1 + float(router[id_s]['input_east']+router[id_s+1]['input_west'])/16 + float(router[id_s+1]['total'])/40
-                                        return FXY_routing(id_s+1,id_d,f) + 1 +  cost_x 
+                                        return FXY_routing(id_s+1,id_d,f) + 1 +  cost_x /40
 
                                 else:
                                         #print "North",
                                         if f:
                                                 return FXY_routing (id_s + num_of_col,id_d,f) + 1 + float(router[id_s]['input_north']+router[id_s+num_of_col]['input_south'])/16 + float(router[id_s+num_of_col]['total'])/40
-                                        return FXY_routing(id_s+num_of_col,id_d,f) + 1 + cost_y 
+                                        return FXY_routing(id_s+num_of_col,id_d,f) + 1 + cost_y/40 
                                         
                                 
                         if x_s > x_d and y_s > y_d:
@@ -112,12 +112,12 @@ def FXY_routing (id_s , id_d ,f):
                                         #print "West",
                                         if f:
                                                 return FXY_routing (id_s -1 , id_d,f) + 1 + float(router[id_s]['input_west']+router[id_s-1]['input_east'])/16 + float(router[id_s-1]['total'])/40
-                                        return FXY_routing(id_s-1,id_d,f) + 1 + cost_x  
+                                        return FXY_routing(id_s-1,id_d,f) + 1 + cost_x/40  
                                 else:
                                         #print "South",
                                         if f:
                                                 return FXY_routing (id_s - num_of_col, id_d,f) + 1 + float(router[id_s]['input_south']+router[id_s-num_of_col]['input_north'])/16 + float(router[id_s-num_of_col]['total'])/40
-                                        return FXY_routing(id_s-num_of_col,id_d,f) + 1 + cost_y 
+                                        return FXY_routing(id_s-num_of_col,id_d,f) + 1 + cost_y/40 
                         if x_s > x_d and y_s < y_d:
                                 cost_x = compute_cost (router[id_s-1]['input_east'],router[id_s-1]['total']) #
                                 cost_y = compute_cost (router[id_s+num_of_col]['input_south'],router[id_s+num_of_col]['total'])
@@ -125,12 +125,12 @@ def FXY_routing (id_s , id_d ,f):
                                         #print "West",
                                         if f:
                                                 return FXY_routing (id_s -1 , id_d,f) + 1 + float(router[id_s]['input_west']+router[id_s-1]['input_east'])/16 + float(router[id_s-1]['total'])/40
-                                        return FXY_routing(id_s-1,id_d,f) + 1 +  cost_x
+                                        return FXY_routing(id_s-1,id_d,f) + 1 +  cost_x/40
                                 else : 
                                         #print "North",
                                         if f:
                                                 return FXY_routing (id_s + num_of_col,id_d,f) + 1 + float(router[id_s]['input_north']+router[id_s+num_of_col]['input_south'])/16 + float(router[id_s+num_of_col]['total'])/40
-                                        return FXY_routing(id_s+num_of_col,id_d,f) + 1 +  cost_y
+                                        return FXY_routing(id_s+num_of_col,id_d,f) + 1 +  cost_y/40
                                         
                         if x_s < x_d and y_s > y_d:
                                 cost_x = compute_cost (router[id_s+1]['input_west'],router[id_s+1]['total']) #
@@ -139,12 +139,12 @@ def FXY_routing (id_s , id_d ,f):
                                         #print "East",
                                         if f :
                                                 return FXY_routing(id_s+1,id_d,f) + 1 + float(router[id_s]['input_east']+router[id_s+1]['input_west'])/16 + float(router[id_s+1]['total'])/40
-                                        return FXY_routing(id_s+1,id_d,f) + 1 + cost_x
+                                        return FXY_routing(id_s+1,id_d,f) + 1 + cost_x/40
                                 else:
                                         #print "South",
                                         if f:
                                                 return FXY_routing (id_s - num_of_col, id_d,f) + 1 + float(router[id_s]['input_south']+router[id_s-num_of_col]['input_north'])/16 + float(router[id_s-num_of_col]['total'])/40
-                                        return FXY_routing(id_s-num_of_col,id_d,f) + 1 + cost_y
+                                        return FXY_routing(id_s-num_of_col,id_d,f) + 1 + cost_y/40
                                 
                                 
                                  
@@ -170,11 +170,10 @@ def initialize ():
         	ax.plot(input_buffer_occup,inbff_[i], label=mf[i])
         	
         ax.legend(loc='upper right', shadow=True)
-        plt.title("Membership Function For Input_Buffer_occupied")	
+        plt.title("Membership Function For Input Buffer Occupied")	
+        plt.xlabel("Number of Input Buffer Occupied")
+        plt.ylabel("Membership Value")
         
-        plt.show()
-        
-	#global tobff_ #= [[],[],[],[],[]]
         tobff_[0] = fuzz.trimf(total_buffer_occup , [0, 0, 10] )
         tobff_[1] = fuzz.trimf(total_buffer_occup , [0, 10, 20] )
         tobff_[2]  = fuzz.trimf(total_buffer_occup , [10, 20, 30] )
@@ -185,11 +184,10 @@ def initialize ():
         	ax.plot(total_buffer_occup,tobff_[i], label=mf[i])
         	
         ax.legend(loc='upper right', shadow=True)
-        plt.title("Membership Function For Total_Buffer_occupied")	
+        plt.title("Membership Function For Total Buffer Occupied")
+        plt.xlabel("Number of Total Buffer Occupied")
+        plt.ylabel("Membership Value")
         
-        plt.show()
-
-	#global r_cost_ #= [[],[],[],[],[]]
         r_cost_[0]  = fuzz.trimf(router_cost , [0, 0, 10] )
         r_cost_[1] = fuzz.trimf(router_cost , [0, 10, 20] )
         r_cost_[2]  = fuzz.trimf(router_cost , [10, 20, 30] )
@@ -374,10 +372,9 @@ if __name__ == "__main__":
                 for it in xrange(x*y):
                         routing_table.append([])
                         routing_table[it] = dsdv(it,x,0)
-                        #k=input()
+                        
 ##                print "\n\n | "
-##                for it in xrange(x*x):
-##                        print it , " | "
+##                
 ##                
 ##                for it in xrange(x*x):
 ##                        print it,
@@ -386,9 +383,12 @@ if __name__ == "__main__":
 ##                        print "\n"
 ##                print "\n\n\n"
 ##                for it in xrange(x*x):
-##                        print jt,
+##                        print it , " | ",
+##                print "\n"
+##                for it in xrange(x*x):
+##                        print it, " *",
 ##                        for jt in xrange(x*x):
-##                               print routing_table[it][jt]['cost'] , " | " ,
+##                               print (  "%.2f"%routing_table[it][jt]['cost'] ), 
 ##                        print "\n"
                 F = []
                 D = []
@@ -409,16 +409,18 @@ if __name__ == "__main__":
                         while source == dest:
                                 dest = random.randint (0,x*y-1)
                         #print "source = " , source , "dest" , dest 
+                        #print "FXY"
                         fxy = FXY_routing(source,dest,1)
-                        ##print 
-                        dsdv_xy = dsdv_compute(source,dest,routing_table)     
+                        #print "DSDV" 
+                        dsdv_xy = dsdv_compute(source,dest,routing_table)
+                        #print routing_table[source]
+                        #print "XY"
                         xy =  XY_routing(source,dest)
                         M = min(M,min(fxy,min(xy,dsdv_xy)))
                         F.append(fxy)
                         D.append(dsdv_xy)
                         X.append(xy)
-                        #print fxy , xy , " next " , dsdv_xy , " ", M
-
+                        #print "fxy " , fxy , "xy", xy , " dsdv " , dsdv_xy 
                         if fxy == M:
                                 Pass_fxy = Pass_fxy + 1
                         if dsdv_xy == M:
@@ -433,7 +435,7 @@ if __name__ == "__main__":
                 
                 print "Test Cycle = " , t
                 print "Processing Time " , t2 ,"Sec"
-                print "Topology 2-D Mesh (",x,"*",y,")"
+                print 'Topology 2-D Mesh (',x,'*',y,')'
                 print "Non - Fuzzy Accuracy = ",  (float(Pass_xy*100) /t) , "%"
                 print "Fuzzy Accuracy = ",  (float(Pass_fxy*100) /t) , "%"
                 print "Fuzzy-DSDV Accuracy = ",  (float(Pass_dsdv*100) /t) , "%"
@@ -441,11 +443,11 @@ if __name__ == "__main__":
                 x_axis = np.arange(1,t+1,1)
                 
                 fig,ax = plt.subplots()
-                
+                ax.plot(x_axis,X,'g--',label='Non-Fuzzy')
                 ax.plot(x_axis,F,'r--',label='Fuzzy-XY')
                 ax.plot(x_axis,D,'b--',label='Fuzzy-DSDV')
-                ax.plot(x_axis,X,'g--',label='Non-Fuzzy')
-                
-                ax.legend(loc='upper right', shadow=True)
-                plt.show()
+                plt.xlabel("Test Run Number")
+                plt.ylabel("Cost")
+                plt.legend(loc='upper right', shadow=True)
+plt.show()
                         
