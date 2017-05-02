@@ -91,7 +91,7 @@ def FXY_routing (id_s , id_d ,f):
                 else:
                         if x_s < x_d and y_s < y_d:                                  
                                 cost_x = compute_cost (router[id_s+1]['input_west'],router[id_s+1]['total']) 
-                                cost_y = compute_cost (router[id_s+num_of_col]['input_south'],router[id_s+num_of_col]['total'])/40
+                                cost_y = compute_cost (router[id_s+num_of_col]['input_south'],router[id_s+num_of_col]['total'])
                                 if cost_x <= cost_y:
                                         #print "East", 
                                         if f:
@@ -233,7 +233,7 @@ def compute_cost (_input , _total ):
 
 def dsdv(i,x,i_cost):
         MAX = sys.maxsize
-        forward_table = [{'cost':0,'node':0} for j in xrange(x*x) ]
+        forward_table = [{'cost':MAX,'node':0} for j in xrange(x*x) ]
         cal = []
         for j in xrange(x*x):
                 cal.append(False)
@@ -241,7 +241,7 @@ def dsdv(i,x,i_cost):
         forward = {}
         flag = True
         counter =0
-        f=0
+        f=1
         forward[i]= -1
         cal[i]=True
         while len(node)!=0 or flag==True:
