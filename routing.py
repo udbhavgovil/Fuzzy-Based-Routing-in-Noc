@@ -196,6 +196,7 @@ def initialize ():
 
         global value 
         value = [0 ,10,20 ,30 ,40]
+        plt.show()
         # , tobff_  , inbff_ ,  input_buffer_occup, total_buffer_occup , value
         #return compute_cost(_input, _total )
         
@@ -360,10 +361,15 @@ def router_initialize(x,y):
 if __name__ == "__main__":
 	initialize ()
 	t = input ()
-	for i in xrange (2,5):
+	for i in xrange (2,6):
+		plt.figure(1)
+		g = 220 + i -1 
+		plt.subplot(g)
+		
 		
                 t1 = time.clock()
                 y = pow(2,i)
+                plt.title("2-D Mesh "+str(y)+"x"+str(y))
                 x=y
                 router = [{'id':k,'input_north':random.randint(1,8),'input_west':random.randint(1,8),'input_south':random.randint(1,8),'input_east':random.randint(1,8),'noc':y , 'nor':x , 'total':0} for k in range(x*y+1)]
                 for k in xrange(x*y):
@@ -442,12 +448,13 @@ if __name__ == "__main__":
                 print ""
                 x_axis = np.arange(1,t+1,1)
                 
-                fig,ax = plt.subplots()
-                ax.plot(x_axis,X,'g--',label='Non-Fuzzy')
-                ax.plot(x_axis,F,'r--',label='Fuzzy-XY')
-                ax.plot(x_axis,D,'b--',label='Fuzzy-DSDV')
+                #fig,ax = plt.subplots()
+                plt.plot(x_axis,X,'g--',label='Non-Fuzzy')
+                plt.plot(x_axis,F,'r--',label='Fuzzy-XY')
+                plt.plot(x_axis,D,'b--',label='Fuzzy-DSDV')
                 plt.xlabel("Test Run Number")
                 plt.ylabel("Cost")
                 plt.legend(loc='upper right', shadow=True)
+                plt.subplots_adjust(top=0.92,bottom=0.08,left=0.10,right=0.95,hspace=0.25,wspace=0.35)
 plt.show()
                         
