@@ -229,7 +229,7 @@ def compute_cost (_input , _total ):
         ##print cost/mvalue
         ##print cost
         ##print mvalue 
-        return (cost/mvalue)
+        return float(cost/mvalue)
 
 def dsdv(i,x,i_cost):
         MAX = sys.maxsize
@@ -240,7 +240,7 @@ def dsdv(i,x,i_cost):
         node = {}
         forward = {}
         flag = True
-        counter =0
+        
         f=1
         forward[i]= -1
         cal[i]=True
@@ -336,7 +336,7 @@ def dsdv_compute(id_s,id_d,routing_table):
                 elif id_s + router[id_s]['noc'] == next_s:
                         return 1 + float(router[id_s]['input_north']+router[id_s+num_of_col]['input_south'])/16+ float(router[id_s+num_of_col]['total'])/40
                 else:
-                        return  + float(router[id_s]['input_south']+router[id_s-num_of_col]['input_north'])/16+ float(router[id_s-num_of_col]['total'])/40
+                        return 1 + float(router[id_s]['input_south']+router[id_s-num_of_col]['input_north'])/16+ float(router[id_s-num_of_col]['total'])/40
 
         #print id_s ,"->", next_s
                 
@@ -350,12 +350,6 @@ def dsdv_compute(id_s,id_d,routing_table):
         else:
                 return dsdv_compute(next_s,id_d,routing_table) + 1 + float(router[id_s]['input_south']+router[id_s-num_of_col]['input_north'])/16+ float(router[id_s-num_of_col]['total'])/40
                         
-def router_initialize(x,y):
-        initialize()
-        global router
-        router = [{'id':k,'input_north':random.randint(1,8),'input_west':random.randint(1,8),'input_south':random.randint(1,8),'input_east':random.randint(1,8),'noc':y , 'nor':x , 'total':0} for k in range(x*y+1)]
-        for k in range(x*y):
-                router[k]['total'] = router[k]['input_north'] + router[k]['input_south'] + router[k]['input_west'] + router[k]['input_east']
                 
 
 if __name__ == "__main__":
@@ -365,13 +359,11 @@ if __name__ == "__main__":
 		plt.figure(1)
 		g = 220 + i -1 
 		plt.subplot(g)
-		
-		
                 t1 = time.clock()
                 y = pow(2,i)
                 plt.title("2-D Mesh "+str(y)+"x"+str(y))
                 x=y
-                router = [{'id':k,'input_north':random.randint(1,8),'input_west':random.randint(1,8),'input_south':random.randint(1,8),'input_east':random.randint(1,8),'noc':y , 'nor':x , 'total':0} for k in range(x*y+1)]
+                router = [{'id':k,'input_north':random.randint(1,8),'input_west':random.randint(1,8),'input_south':random.randint(1,8),'input_east':random.randint(1,8),'noc':y , 'nor':x , 'total':0} for k in range(x*y)]
                 for k in xrange(x*y):
                         router[k]['total'] = router[k]['input_north'] + router[k]['input_south'] + router[k]['input_west'] + router[k]['input_east']
                 routing_table = []
@@ -411,7 +403,6 @@ if __name__ == "__main__":
                         M = sys.maxsize
                         source = random.randint(0,x*y-1)
                         dest = random.randint (0,x*y-1)
-                        count = 0
                         while source == dest:
                                 dest = random.randint (0,x*y-1)
                         #print "source = " , source , "dest" , dest 
